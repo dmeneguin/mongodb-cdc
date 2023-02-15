@@ -1,0 +1,14 @@
+version: '1'
+services:
+  cdc-listener:
+    image: cdc-listener
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    command: python3 cdc_listener.py
+    networks:
+      - mongo-cdc-network
+
+networks:
+  mongo-cdc-network:
+    name: mongo-cdc-network
