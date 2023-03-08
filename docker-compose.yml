@@ -31,17 +31,18 @@ services:
     networks:
       - mongo-cdc-network
 
-  # mongo-express:
-  #   image: mongo-express:latest
-  #   restart: always
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
-  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo1:27017/
-  #   networks:
-  #     - mongo-cdc-network
+  mongoclient:
+    container_name: "mongoclient"
+    image: mongoclient/mongoclient:latest
+    restart: always
+    depends_on:
+      - mongo1
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo1:27017
+    networks:
+      - mongo-cdc-network
 
 networks:
   mongo-cdc-network:
