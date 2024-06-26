@@ -9,6 +9,17 @@ services:
     networks:
       - mongo-cdc-network
 
+  rabbitmq:
+    image: rabbitmq:3.9.16-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq-conf:/etc/rabbitmq
+    networks:
+      - mongo-cdc-network
+
+
 networks:
   mongo-cdc-network:
     name: mongo-cdc-network

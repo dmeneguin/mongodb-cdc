@@ -1,5 +1,8 @@
 import pymongo
 import logging
+import pika
+import json
+from bson import BSON
 
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
@@ -12,7 +15,19 @@ try:
     with db.jorge.watch() as stream:
         for insert_change in stream:
             logging.info(insert_change)
-            resume_token = stream.resume_token
+            resume_token = stream.resume_token 
+
+            connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+            channel = connection.channel()
+
+            channel.queue_declare(queue='hello')
+
+            channel.basic_publish(exchange='',
+                                routing_key='hello',
+                                body=BSON.encode(insert_change))
+            print(" [x] Sent 'Hello World!'")
+            connection.close()
+
 except pymongo.errors.PyMongoError as e:
     # The ChangeStream encountered an unrecoverable error or the
     # resume attempt failed to recreate the cursor.
