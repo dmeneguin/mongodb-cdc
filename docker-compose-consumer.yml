@@ -1,0 +1,14 @@
+version: '1'
+services:
+  consumer:
+    image: oplog-consumer
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    command: python3 consumer.py
+    networks:
+      - mongo-cdc-network
+
+networks:
+  mongo-cdc-network:
+    name: mongo-cdc-network

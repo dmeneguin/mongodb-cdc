@@ -1,7 +1,6 @@
 import pymongo
 import logging
 import pika
-import json
 from bson import BSON
 
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
@@ -14,7 +13,9 @@ try:
     #pipeline = [{'$match': {'operationType': 'insert'}}]
     with db.jorge.watch() as stream:
         for insert_change in stream:
+            logging.info('----------------')
             logging.info(insert_change)
+            logging.info('----------------')
             resume_token = stream.resume_token 
 
             connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
